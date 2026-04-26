@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA DE ANÁLISE SOCIOESTRUTURAL | BAUHAUS EDITION</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
+    <style>
+        /* Paleta Bauhaus Pastel */
+        :root {
+            --b-red: #e68a8a;    /* Terracota Pastel */
+            --b-yellow: #f2d07e; /* Amarelo Mostarda Suave */
+            --b-blue: #8fb1bf;   /* Azul Petróleo Pastel */
+            --b-black: #2d2d2d;  /* Grafite industrial */
+            --b-beige: #f4f1ea;  /* Off-white papel antigo */
+        }
+
+        body {
+            background-color: var(--b-beige);
+            color: var(--b-black);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Formas Geométricas Ornamentais */
+        .shape-circle { position: absolute; border-radius: 50%; background: var(--b-yellow); z-index: -1; }
+        .shape-rect { position: absolute; background: var(--b-blue); z-index: -1; }
+        .shape-tri { 
+            position: absolute; width: 0; height: 0; 
+            border-left: 50px solid transparent; border-right: 50px solid transparent;
+            border-bottom: 80px solid var(--b-red); z-index: -1; 
+        }
+
+        /* Container Bauhaus */
+        .main-frame {
+            border: 4px solid var(--b-black);
+            min-height: 100vh;
+            margin: 10px;
+            padding: 2rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Botões Bauhaus */
+        .choice-btn {
+            background: white;
+            border: 3px solid var(--b-black);
+            padding: 20px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.2s;
+            position: relative;
+            box-shadow: 6px 6px 0px var(--b-black);
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .choice-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 10px 10px 0px var(--b-red);
+            background: var(--b-beige);
+        }
+
+        /* Barras de Status "Modernistas" */
+        .stat-container {
+            width: 100%;
+            height: 25px;
+            border: 3px solid var(--b-black);
+            background: white;
+            margin-bottom: 10px;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: var(--b-blue);
+            transition: width 1s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        }
+
+        .header-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 900;
+            line-height: 0.9;
+            font-size: 2.5rem;
+            letter-spacing: -2px;
+        }
+
+        .mono { font-family: 'Space Mono', monospace; font-size: 0.7rem; }
+
+        .hidden-scene { display: none !important; }
+
+        /* Divisórias Industriais */
+        .divider { height: 3px; background: var(--b-black); width: 100%; margin: 20px 0; }
+
+    </style>
+</head>
+<body>
+
+    <div class="shape-circle w-64 h-64 -top-20 -right-20 opacity-50"></div>
+    <div class="shape-rect w-32 h-96 top-40 -left-10 opacity-30"></div>
+    <div class="shape-tri top-[70%] right-[10%] scale-150 opacity-40"></div>
+
+    <div class="main-frame">
+        <header class="flex flex-col md:flex-row justify-between items-start gap-6">
+            <div class="max-w-md">
+                <h1 class="header-title">Caminhos<br><span style="color: var(--b-red)">Desiguais</span></h1>
+                <p class="mono mt-2 font-bold uppercase tracking-widest">SISTEMA DE ANÁLISE SOCIOLÓGICA v5.0</p>
+            </div>
+            
+            <div id="stats" class="hidden w-full md:w-64 bg-white border-2 border-black p-4">
+                <p class="mono font-bold mb-1">CONHECIMENTO (C)</p>
+                <div class="stat-container"><div id="fill-c" class="stat-fill"></div></div>
+                <p class="mono font-bold mb-1">EXAUSTÃO (E)</p>
+                <div class="stat-container"><div id="fill-e" class="stat-fill" style="background: var(--b-red);"></div></div>
+            </div>
+        </header>
+
+        <div class="divider"></div>
+
+        <section id="start-screen" class="flex-1 flex flex-col justify-center">
+            <div class="max-w-2xl">
+                <h2 class="text-6xl font-black mb-6">A Geometria da Sorte.</h2>
+                <p class="text-xl mb-10 leading-relaxed">
+                    Sua origem social desenha os limites do seu futuro. <br>
+                    Navegue pela estrutura, faça suas escolhas, enfrente a escassez.
+                </p>
+                <button onclick="transitionTo('roulette-screen')" class="choice-btn text-2xl px-12 bg-[#f2d07e]">
+                    SORTEAR ORIGEM SOCIAL
+                </button>
+            </div>
+        </section>
+
+        <section id="roulette-screen" class="hidden-scene flex-1 flex flex-col justify-center items-center">
+            <div id="wheel" class="w-48 h-48 border-8 border-black rounded-full flex items-center justify-center animate-spin">
+                <div class="w-full h-2 bg-black"></div>
+            </div>
+            <p id="path-reveal" class="mt-12 text-4xl font-black uppercase tracking-tighter italic"></p>
+        </section>
+
+        <section id="game-screen" class="hidden-scene flex-1 grid grid-cols-1 lg:grid-cols-2 gap-12 mt-8">
+            <div class="flex flex-col">
+                <span id="phase-tag" class="mono font-bold text-lg mb-4 underline"></span>
+                <h3 id="phase-title" class="text-5xl font-black mb-6 uppercase leading-none"></h3>
+                <p id="phase-desc" class="text-lg leading-relaxed mb-8"></p>
+                
+                <div id="ibge-box" class="bg-black text-white p-6 mono text-sm relative">
+                    <div class="absolute -top-4 -left-4 bg-[var(--b-red)] text-black px-2 py-1 font-bold">INFO</div>
+                    </div>
+            </div>
+
+            <div id="choice-list" class="flex flex-col justify-center">
+                </div>
+        </section>
+
+        <section id="results-screen" class="hidden-scene flex-1 flex flex-col justify-center items-center text-center">
+            <p class="mono font-bold text-xl mb-4">VEREDITO ESTRUTURAL:</p>
+            <h2 id="final-course" class="header-title text-7xl md:text-9xl mb-8 uppercase" style="color: var(--b-blue)"></h2>
+            
+            <div class="max-w-2xl bg-white border-4 border-black p-10 shadow-[20px_20px_0px_var(--b-yellow)]">
+                <p id="final-desc" class="text-lg leading-relaxed mb-8 font-medium"></p>
+                <button onclick="location.reload()" class="mono font-bold hover:underline">REINICIAR EXPERIMENTO</button>
+            </div>
+        </section>
+
+        <footer class="mt-12 flex justify-between items-end">
+            <div class="mono font-bold">ID_SESSION: <span id="session-id" style="color: var(--b-red)"></span></div>
+            <div class="flex gap-2">
+                <div class="w-4 h-4 bg-[var(--b-red)]"></div>
+                <div class="w-4 h-4 bg-[var(--b-yellow)]"></div>
+                <div class="w-4 h-4 bg-[var(--b-blue)]"></div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const WEB_APP_URL = "SUA_URL_AQUI";
+
+        const DATA_MODEL = {
+            A: { 
+                name: "Elite", s: { c: 60, e: 10 }, 
+                phases: [
+                    { t: "Primeiros Anos", d: "Ambiente planejado, dieta balanceada e estímulos pedagógicos constantes.", fact: "IBGE: A base do capital cultural é consolidada nos primeiros 1.000 dias de vida.", c: [{n: "Educação Bilíngue", m:{c:20}}, {n: "Aulas de Artes", m:{c:10}}, {n: "Lazer Estruturado", m:{c:8, e:-5}}] },
+                    { t: "Ensino Básico", d: "Escola como espaço de construção de rede social (Networking) e domínio técnico.", fact: "INEP: Escolas particulares de alto custo oferecem 4x mais atividades extracurriculares.", c: [{n: "Intercâmbio Médio", m:{c:25}}, {n: "Tutoria de Elite", m:{c:15}}, {n: "Liderança Estudantil", m:{c:10}}] },
+                    { t: "Portão de Saída", d: "O suporte financeiro permite que o foco seja apenas a alta performance acadêmica.", fact: "SCHILLING: O investimento prévio reduz a incerteza do resultado final.", c: [{n: "Foco em Medicina", m:{c:30, e:10}}, {n: "Foco em Direito", m:{c:20}}, {n: "Gestão e Business", m:{c:15, e:-10}}] }
+                ]
+            },
+            C: { 
+                name: "Vulnerável", s: { c: 15, e: 40 }, 
+                phases: [
+                    { t: "Primeiros Anos", d: "Instabilidade habitacional e falta de acesso a creches públicas de qualidade.", fact: "IBGE: A ausência de creches força a estagnação do desenvolvimento cognitivo precoce.", c: [{n: "Trabalho Doméstico", m:{e:20}}, {n: "Escola Sucateada", m:{c:5, e:10}}, {n: "Autodidatismo", m:{c:8, e:25}}] },
+                    { t: "Ensino Básico", d: "Necessidade de conciliar estudo com a geração de renda imediata para a família.", fact: "IBGE: O trabalho precoce é a maior barreira para a conclusão do Ensino Médio.", c: [{n: "Trabalho 44h", m:{e:35, c:-10}}, {n: "Estudo Noturno", m:{c:10, e:30}}, {n: "Bicos Informais", m:{e:25, c:2}}] },
+                    { t: "Portão de Saída", d: "A fadiga acumulada e a lacuna de base tornam o vestibular um muro quase intransponível.", fact: "INEP: O cansaço físico é o fator oculto que reduz as notas da classe base em 30%.", c: [{n: "Tentar ENEM Exausto", m:{c:10, e:20}}, {n: "Trabalho Imediato", m:{c:-10, e:5}}, {n: "Curso Técnico", m:{c:15, e:15}}] }
+                ]
+            }
+        };
+
+        let session = { id: Math.random().toString(36).substr(2, 5).toUpperCase(), path: null, stats: {}, current: 0 };
+        document.getElementById('session-id').innerText = session.id;
+
+        function transitionTo(id) {
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden-scene'));
+            document.getElementById(id).classList.remove('hidden-scene');
+            if(id === 'roulette-screen') spin();
+            if(id === 'game-screen') document.getElementById('stats').classList.remove('hidden');
+        }
+
+        function spin() {
+            const keys = ["A", "C"];
+            const chosen = keys[Math.floor(Math.random() * keys.length)];
+            setTimeout(() => {
+                session.path = DATA_MODEL[chosen];
+                session.stats = {...session.path.s};
+                document.getElementById('path-reveal').innerText = "ORIGEM: " + session.path.name;
+                setTimeout(() => { updateUI(); render(); transitionTo('game-screen'); }, 2000);
+            }, 2500);
+        }
+
+        function updateUI() {
+            document.getElementById('fill-c').style.width = Math.min(100, session.stats.c) + '%';
+            document.getElementById('fill-e').style.width = Math.min(100, session.stats.e) + '%';
+        }
+
+        function render() {
+            const p = session.path.phases[session.current];
+            if(!p) return end();
+            document.getElementById('phase-tag').innerText = "FASE_0" + (session.current + 1);
+            document.getElementById('phase-title').innerText = p.t;
+            document.getElementById('phase-desc').innerText = p.d;
+            document.getElementById('ibge-box').innerText = "DADO IBGE: " + p.fact;
+            
+            const list = document.getElementById('choice-list');
+            list.innerHTML = '';
+            p.c.forEach(c => {
+                const b = document.createElement('button');
+                b.className = "choice-btn";
+                b.innerHTML = `<span>${c.n}</span>`;
+                b.onclick = () => {
+                    for(let m in c.m) session.stats[m] += c.m[m];
+                    session.current++;
+                    updateUI();
+                    render();
+                };
+                list.appendChild(b);
+            });
+        }
+
+        function end() {
+            transitionTo('results-screen');
+            const c = session.stats.c;
+            const e = session.stats.e;
+            let curso = c > 110 ? "MEDICINA" : c > 75 ? "DIREITO" : "SUBEMPREGO";
+            let desc = c > 110 ? "Seu sucesso é o resultado matemático de um sistema projetado para você." : "A geometria social impediu sua ascensão. O cansaço físico consumiu seu capital acadêmico.";
+            
+            document.getElementById('final-course').innerText = curso;
+            document.getElementById('final-desc').innerText = desc;
+        }
+    </script>
+</body>
+</html>
