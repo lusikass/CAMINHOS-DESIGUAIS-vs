@@ -3,259 +3,356 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA DE ANÁLISE SOCIOESTRUTURAL | BAUHAUS EDITION</title>
+    <title>SISTEMA DE ANÁLISE SOCIOESTRUTURAL | PESQUISA v11.0 REAL-TIME</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
     <style>
-        /* Paleta Bauhaus Pastel */
         :root {
-            --b-red: #e68a8a;    /* Terracota Pastel */
-            --b-yellow: #f2d07e; /* Amarelo Mostarda Suave */
-            --b-blue: #8fb1bf;   /* Azul Petróleo Pastel */
-            --b-black: #2d2d2d;  /* Grafite industrial */
-            --b-beige: #f4f1ea;  /* Off-white papel antigo */
+            --b-red: #e68a8a; --b-yellow: #f2d07e; --b-blue: #8fb1bf;
+            --b-black: #2d2d2d; --b-beige: #f4f1ea;
         }
-
-        body {
-            background-color: var(--b-beige);
-            color: var(--b-black);
-            font-family: 'Outfit', sans-serif;
-            overflow-x: hidden;
-        }
-
-        /* Formas Geométricas Ornamentais */
-        .shape-circle { position: absolute; border-radius: 50%; background: var(--b-yellow); z-index: -1; }
-        .shape-rect { position: absolute; background: var(--b-blue); z-index: -1; }
-        .shape-tri { 
-            position: absolute; width: 0; height: 0; 
-            border-left: 50px solid transparent; border-right: 50px solid transparent;
-            border-bottom: 80px solid var(--b-red); z-index: -1; 
-        }
-
-        /* Container Bauhaus */
-        .main-frame {
-            border: 4px solid var(--b-black);
-            min-height: 100vh;
-            margin: 10px;
-            padding: 2rem;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Botões Bauhaus */
-        .choice-btn {
-            background: white;
-            border: 3px solid var(--b-black);
-            padding: 20px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.2s;
-            position: relative;
-            box-shadow: 6px 6px 0px var(--b-black);
-            text-align: left;
-            margin-bottom: 1.5rem;
-        }
-
-        .choice-btn:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 10px 10px 0px var(--b-red);
-            background: var(--b-beige);
-        }
-
-        /* Barras de Status "Modernistas" */
-        .stat-container {
-            width: 100%;
-            height: 25px;
-            border: 3px solid var(--b-black);
-            background: white;
-            margin-bottom: 10px;
-        }
-
-        .stat-fill {
-            height: 100%;
-            background: var(--b-blue);
-            transition: width 1s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-        }
-
-        .header-title {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 900;
-            line-height: 0.9;
-            font-size: 2.5rem;
-            letter-spacing: -2px;
-        }
-
+        body { background-color: var(--b-beige); color: var(--b-black); font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+        .main-frame { border: 4px solid var(--b-black); min-height: 100vh; margin: 10px; padding: 2rem; position: relative; display: flex; flex-direction: column; }
+        .choice-btn { background: white; border: 3px solid var(--b-black); padding: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; box-shadow: 4px 4px 0px var(--b-black); text-align: left; margin-bottom: 1rem; width: 100%; font-size: 0.9rem; }
+        .choice-btn:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0px var(--b-red); background: var(--b-beige); }
+        .stat-container { width: 100%; height: 20px; border: 3px solid var(--b-black); background: white; margin-bottom: 8px; }
+        .stat-fill { height: 100%; background: var(--b-blue); transition: width 1s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+        .header-title { font-weight: 900; line-height: 0.9; font-size: 2.5rem; letter-spacing: -2px; }
         .mono { font-family: 'Space Mono', monospace; font-size: 0.7rem; }
-
         .hidden-scene { display: none !important; }
-
-        /* Divisórias Industriais */
-        .divider { height: 3px; background: var(--b-black); width: 100%; margin: 20px 0; }
-
+        .form-section { background: white; border: 4px solid var(--b-black); padding: 2rem; box-shadow: 10px 10px 0px var(--b-blue); }
+        select, textarea { width: 100%; border: 2px solid var(--b-black); padding: 10px; margin-top: 5px; font-family: 'Outfit'; font-weight: 600; }
+        .progress-bar { width: 100%; height: 8px; background: #ddd; border: 2px solid var(--b-black); margin-bottom: 1rem; }
+        .progress-fill { height: 100%; background: var(--b-yellow); transition: width 0.3s; }
+        .sisu-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+        .pulse-loader { width: 100px; height: 100px; background: var(--b-red); border: 4px solid var(--b-black); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.7; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.7; } }
     </style>
 </head>
 <body>
 
-    <div class="shape-circle w-64 h-64 -top-20 -right-20 opacity-50"></div>
-    <div class="shape-rect w-32 h-96 top-40 -left-10 opacity-30"></div>
-    <div class="shape-tri top-[70%] right-[10%] scale-150 opacity-40"></div>
-
     <div class="main-frame">
         <header class="flex flex-col md:flex-row justify-between items-start gap-6">
-            <div class="max-w-md">
+            <div>
                 <h1 class="header-title">Caminhos<br><span style="color: var(--b-red)">Desiguais</span></h1>
-                <p class="mono mt-2 font-bold uppercase tracking-widest">SISTEMA DE ANÁLISE SOCIOLÓGICA v5.0</p>
+                <p class="mono mt-2 font-bold">LABORATÓRIO DE COMPORTAMENTO SOCIAL v11.0 | REAL-TIME</p>
             </div>
-            
-            <div id="stats" class="hidden w-full md:w-64 bg-white border-2 border-black p-4">
-                <p class="mono font-bold mb-1">CONHECIMENTO (C)</p>
+            <div id="stats" class="hidden-scene w-full md:w-64 bg-white border-2 border-black p-4">
+                <p class="mono font-bold mb-1 text-[10px]">CAPITAL CULTURAL (C)</p>
                 <div class="stat-container"><div id="fill-c" class="stat-fill"></div></div>
-                <p class="mono font-bold mb-1">EXAUSTÃO (E)</p>
+                <p class="mono font-bold mb-1 text-[10px]">EXAUSTÃO ESTRUTURAL (E)</p>
                 <div class="stat-container"><div id="fill-e" class="stat-fill" style="background: var(--b-red);"></div></div>
+                <p class="mono font-bold mb-3 mt-3 text-[10px]">REDE SOCIAL (R)</p>
+                <div class="stat-container"><div id="fill-r" class="stat-fill" style="background: var(--b-yellow);"></div></div>
             </div>
         </header>
 
-        <div class="divider"></div>
+        <div class="h-1 bg-black my-6"></div>
 
-        <section id="start-screen" class="flex-1 flex flex-col justify-center">
-            <div class="max-w-2xl">
-                <h2 class="text-6xl font-black mb-6">A Geometria da Sorte.</h2>
-                <p class="text-xl mb-10 leading-relaxed">
-                    Sua origem social desenha os limites do seu futuro. <br>
-                    Navegue pela estrutura, faça suas escolhas, enfrente a escassez.
-                </p>
-                <button onclick="transitionTo('roulette-screen')" class="choice-btn text-2xl px-12 bg-[#f2d07e]">
-                    SORTEAR ORIGEM SOCIAL
-                </button>
+        <!-- TELA 1: CONSENTIMENTO -->
+        <section id="scene-consent" class="flex-1 flex flex-col justify-center max-w-3xl mx-auto">
+            <div class="form-section">
+                <h2 class="text-3xl font-black mb-4 uppercase">Termo de Consentimento</h2>
+                <div class="mb-6 leading-relaxed text-sm">
+                    <p class="mb-3"><strong>Objetivo:</strong> Investigar o impacto da desigualdade estrutural no acesso ao ensino superior.</p>
+                    <p class="mb-3"><strong>O que você fará:</strong> Atravessará 7 fases de vida até o ENEM. Seus dados serão enviados em tempo real para análise.</p>
+                    <p class="mb-3"><strong>Privacidade:</strong> Coleta 100% anônima. Nenhuma informação pessoal identificável é solicitada.</p>
+                </div>
+                <div class="flex gap-4">
+                    <button onclick="app.start()" class="choice-btn bg-[var(--b-yellow)] text-center shadow-none flex-1">ACEITO PARTICIPAR</button>
+                    <button onclick="app.reject()" class="choice-btn bg-white text-center shadow-none flex-1">NÃO ACEITO</button>
+                </div>
             </div>
         </section>
 
-        <section id="roulette-screen" class="hidden-scene flex-1 flex flex-col justify-center items-center">
-            <div id="wheel" class="w-48 h-48 border-8 border-black rounded-full flex items-center justify-center animate-spin">
+        <!-- TELA 2: PRÉ-QUESTIONÁRIO -->
+        <section id="scene-pre" class="hidden-scene flex-1 flex flex-col justify-center max-w-3xl mx-auto">
+            <h2 class="text-3xl font-black mb-6 uppercase">Perfil Prévio</h2>
+            <div class="form-section">
+                <label class="font-bold block mb-2">1. Você acredita que o sucesso depende principalmente de esforço individual?</label>
+                <select id="pre-1">
+                    <option value="">-- Selecione --</option>
+                    <option value="Sim, totalmente">Sim, totalmente</option>
+                    <option value="Parcialmente">Parcialmente</option>
+                    <option value="Não, depende de outros fatores">Não, depende de outros fatores</option>
+                </select>
+
+                <label class="font-bold block mb-2 mt-6">2. Você acredita que o sistema educacional brasileiro oferece oportunidades iguais?</label>
+                <select id="pre-2">
+                    <option value="">-- Selecione --</option>
+                    <option value="Sim, é justo">Sim, é justo</option>
+                    <option value="Parcialmente justo">Parcialmente justo</option>
+                    <option value="Não, é desigual">Não, é desigual</option>
+                </select>
+
+                <label class="font-bold block mb-2 mt-6">3. Qual é sua opinião sobre políticas de cotas?</label>
+                <select id="pre-3">
+                    <option value="">-- Selecione --</option>
+                    <option value="Totalmente a favor">Totalmente a favor</option>
+                    <option value="Neutro">Neutro</option>
+                    <option value="Totalmente contra">Totalmente contra</option>
+                </select>
+
+                <button onclick="app.savePre()" class="choice-btn bg-[var(--b-blue)] mt-8 text-center shadow-none">INICIAR TRAJETÓRIA</button>
+            </div>
+        </section>
+
+        <!-- TELA 3: SORTEIO -->
+        <section id="scene-roulette" class="hidden-scene flex-1 flex flex-col justify-center items-center">
+            <div class="w-48 h-48 border-8 border-black rounded-full flex items-center justify-center animate-spin">
                 <div class="w-full h-2 bg-black"></div>
             </div>
-            <p id="path-reveal" class="mt-12 text-4xl font-black uppercase tracking-tighter italic"></p>
+            <p id="path-reveal" class="mt-12 text-4xl font-black uppercase italic tracking-tighter"></p>
         </section>
 
-        <section id="game-screen" class="hidden-scene flex-1 grid grid-cols-1 lg:grid-cols-2 gap-12 mt-8">
+        <!-- TELA 4: JOGO -->
+        <section id="scene-game" class="hidden-scene flex-1 grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div class="flex flex-col">
-                <span id="phase-tag" class="mono font-bold text-lg mb-4 underline"></span>
-                <h3 id="phase-title" class="text-5xl font-black mb-6 uppercase leading-none"></h3>
-                <p id="phase-desc" class="text-lg leading-relaxed mb-8"></p>
-                
-                <div id="ibge-box" class="bg-black text-white p-6 mono text-sm relative">
-                    <div class="absolute -top-4 -left-4 bg-[var(--b-red)] text-black px-2 py-1 font-bold">INFO</div>
-                    </div>
-            </div>
-
-            <div id="choice-list" class="flex flex-col justify-center">
+                <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+                <span id="phase-tag" class="mono font-bold text-lg mb-2 underline"></span>
+                <h3 id="phase-title" class="text-4xl font-black mb-4 uppercase leading-none"></h3>
+                <p id="phase-desc" class="text-lg mb-6"></p>
+                <div id="ibge-box" class="bg-black text-white p-4 mono text-[11px] relative">
+                    <div class="absolute -top-3 -left-3 bg-[var(--b-red)] text-black px-2 py-0.5 font-bold">INFO</div>
                 </div>
+            </div>
+            <div id="choice-list" class="flex flex-col justify-center"></div>
         </section>
 
-        <section id="results-screen" class="hidden-scene flex-1 flex flex-col justify-center items-center text-center">
-            <p class="mono font-bold text-xl mb-4">VEREDITO ESTRUTURAL:</p>
-            <h2 id="final-course" class="header-title text-7xl md:text-9xl mb-8 uppercase" style="color: var(--b-blue)"></h2>
-            
-            <div class="max-w-2xl bg-white border-4 border-black p-10 shadow-[20px_20px_0px_var(--b-yellow)]">
-                <p id="final-desc" class="text-lg leading-relaxed mb-8 font-medium"></p>
-                <button onclick="location.reload()" class="mono font-bold hover:underline">REINICIAR EXPERIMENTO</button>
+        <!-- TELA 5: SUSPENSE SISU -->
+        <section id="scene-suspense" class="hidden-scene flex-1 flex flex-col justify-center items-center">
+            <div class="sisu-loading">
+                <div class="pulse-loader mb-8"></div>
+                <h2 class="text-4xl font-black uppercase italic">SISU: Processando Nota de Corte...</h2>
+                <div id="suspense-log" class="mt-8 mono text-[10px] text-gray-500 text-center"></div>
             </div>
         </section>
 
-        <footer class="mt-12 flex justify-between items-end">
-            <div class="mono font-bold">ID_SESSION: <span id="session-id" style="color: var(--b-red)"></span></div>
-            <div class="flex gap-2">
-                <div class="w-4 h-4 bg-[var(--b-red)]"></div>
-                <div class="w-4 h-4 bg-[var(--b-yellow)]"></div>
-                <div class="w-4 h-4 bg-[var(--b-blue)]"></div>
+        <!-- TELA 6: PÓS-QUESTIONÁRIO -->
+        <section id="scene-post" class="hidden-scene flex-1 flex flex-col justify-center max-w-3xl mx-auto">
+            <h2 class="text-3xl font-black mb-6 uppercase">Veredito</h2>
+            <div class="form-section">
+                <div id="course-result-box" class="p-6 border-4 border-black mb-8 bg-black text-white">
+                    <p class="mono text-xs mb-2">RESULTADO DO EXAME:</p>
+                    <h3 id="final-course" class="text-4xl font-black uppercase leading-none mb-2"></h3>
+                    <p id="course-desc" class="italic text-sm"></p>
+                </div>
+
+                <h3 class="text-lg font-bold mb-4 uppercase">Avaliação da Experiência</h3>
+                <label class="font-bold block mb-2">1. Você teve as mesmas oportunidades que outros participantes?</label>
+                <select id="post-1">
+                    <option value="">-- Selecione --</option>
+                    <option value="Sim">Sim</option>
+                    <option value="Parcialmente">Parcialmente</option>
+                    <option value="Não">Não</option>
+                </select>
+
+                <label class="font-bold block mb-2 mt-6">2. Seu resultado refletiu apenas suas escolhas?</label>
+                <select id="post-2">
+                    <option value="">-- Selecione --</option>
+                    <option value="Sim">Sim</option>
+                    <option value="Não, o ponto de partida foi decisivo">Não, o ponto de partida foi decisivo</option>
+                </select>
+
+                <label class="font-bold block mb-2 mt-6">3. O que mais impactou sua trajetória?</label>
+                <textarea id="post-3" rows="2"></textarea>
+
+                <label class="font-bold block mb-2 mt-6">4. Como você se sentiu durante a experiência?</label>
+                <textarea id="post-4" rows="2"></textarea>
+
+                <button id="btn-finish" onclick="app.finish()" class="choice-btn bg-black text-white mt-8 text-center">ENVIAR E FINALIZAR</button>
             </div>
+        </section>
+
+        <!-- TELA 7: AGRADECIMENTO -->
+        <section id="scene-thanks" class="hidden-scene flex-1 flex flex-col justify-center items-center text-center">
+            <h2 class="text-5xl font-black uppercase mb-4">Obrigado!</h2>
+            <p class="text-xl mb-8">Sua participação foi registrada com sucesso em nossa base de dados em tempo real.</p>
+            <div class="mono text-sm p-4 bg-white border-2 border-black">
+                ID da Participação: <span id="final-id" class="text-[var(--b-red)]"></span>
+            </div>
+            <button onclick="location.reload()" class="mt-8 underline font-bold uppercase">Reiniciar Experimento</button>
+        </section>
+
+        <footer class="mt-8 flex justify-between items-end">
+            <div class="mono font-bold">ID: <span id="display-id" style="color: var(--b-red)"></span></div>
+            <div id="timer" class="mono font-bold">Tempo: 00:00</div>
         </footer>
     </div>
 
     <script>
-        const WEB_APP_URL = "SUA_URL_AQUI";
+        // CONFIGURAÇÃO DE INTEGRAÇÃO (Ajuste a URL do seu endpoint aqui)
+        const ENDPOINT_URL = "https://SEU-ENDPOINT-AQUI.com/webhook"; // Ex: Integromat, Zapier ou Script do Google
 
         const DATA_MODEL = {
             A: { 
-                name: "Elite", s: { c: 60, e: 10 }, 
+                name: "Elite Herdeira", s: { c: 65, e: 10, r: 70 }, 
                 phases: [
-                    { t: "Primeiros Anos", d: "Ambiente planejado, dieta balanceada e estímulos pedagógicos constantes.", fact: "IBGE: A base do capital cultural é consolidada nos primeiros 1.000 dias de vida.", c: [{n: "Educação Bilíngue", m:{c:20}}, {n: "Aulas de Artes", m:{c:10}}, {n: "Lazer Estruturado", m:{c:8, e:-5}}] },
-                    { t: "Ensino Básico", d: "Escola como espaço de construção de rede social (Networking) e domínio técnico.", fact: "INEP: Escolas particulares de alto custo oferecem 4x mais atividades extracurriculares.", c: [{n: "Intercâmbio Médio", m:{c:25}}, {n: "Tutoria de Elite", m:{c:15}}, {n: "Liderança Estudantil", m:{c:10}}] },
-                    { t: "Portão de Saída", d: "O suporte financeiro permite que o foco seja apenas a alta performance acadêmica.", fact: "SCHILLING: O investimento prévio reduz a incerteza do resultado final.", c: [{n: "Foco em Medicina", m:{c:30, e:10}}, {n: "Foco em Direito", m:{c:20}}, {n: "Gestão e Business", m:{c:15, e:-10}}] }
+                    { t: "Educação Infantil", d: "Acesso a creches bilíngues e estímulos de alta qualidade.", fact: "Heckman: O retorno sobre investimento na primeira infância é o mais alto do ciclo educacional.", c: [{n: "Creche Particular Bilíngue", m:{c:20, r:15}}, {n: "Tutores em Casa", m:{c:18, r:10}}, {n: "Viagens Culturais", m:{c:25, r:20}}, {n: "Esportes de Elite", m:{c:10, r:15}}] },
+                    { t: "Ensino Fundamental", d: "Escolas com infraestrutura de ponta e professores qualificados.", fact: "No Brasil, o gasto por aluno em escolas de elite é até 10x superior à média pública.", c: [{n: "Escola de Referência", m:{c:20, r:15}}, {n: "Intercâmbio de Férias", m:{c:15, r:20}}, {n: "Aulas de Piano/Música", m:{c:10, r:10}}, {n: "Língua Estrangeira Fluente", m:{c:12, r:18}}] },
+                    { t: "Capital Cultural", d: "Construção de repertório através de experiências exclusivas.", fact: "Bourdieu: O capital cultural herdado funciona como um facilitador do sucesso acadêmico.", c: [{n: "Museus Internacionais", m:{c:25, r:15}}, {n: "Teatro e Cinema Semanal", m:{c:15, r:10}}, {n: "Networking em Clubes", m:{c:10, r:25}}, {n: "Leituras de Clássicos", m:{c:20, r:5}}] },
+                    { t: "Ensino Médio", d: "Foco total na preparação para as melhores universidades.", fact: "Candidatos de alta renda ocupam 80% das vagas em cursos de alta concorrência.", c: [{n: "Cursinho Pré-Vestibular de Elite", m:{c:25, e:15}}, {n: "Aulas Particulares de Reforço", m:{c:20, e:10}}, {n: "Simulados de Alta Performance", m:{c:18, e:20}}, {n: "Apoio Psicológico Especializado", m:{c:10, e:-10}}] },
+                    { t: "Estratégia", d: "Escolha do curso sem a barreira da necessidade financeira.", fact: "A liberdade de escolha é um privilégio de quem não precisa de retorno financeiro imediato.", c: [{n: "Medicina", m:{c:30, e:20}}, {n: "Direito", m:{c:25, e:15}}, {n: "Engenharia", m:{c:25, e:18}}, {n: "Relações Internacionais", m:{c:15, e:5}}] },
+                    { t: "Reta Final", d: "Últimos meses de preparação em ambiente controlado.", fact: "Estabilidade emocional e financeira aumenta em 40% o desempenho em exames.", c: [{n: "Imersão Total em Estudos", m:{c:20, e:25}}, {n: "Revisão Leve e Lazer", m:{c:12, e:5}}, {n: "Foco em Redação (Tutoria)", m:{c:18, e:15}}, {n: "Simulados Finais", m:{c:15, e:10}}] },
+                    { t: "O DIA DO ENEM", d: "O momento da prova. Você chega descansado e preparado.", fact: "A ansiedade reduz a performance; o conforto estrutural reduz a ansiedade.", c: [{n: "Ir de Carro (Tranquilidade)", m:{c:10, e:-10}}, {n: "Alimentação Balanceada", m:{c:5, e:-5}}, {n: "Confiança na Base Escolar", m:{c:15, e:0}}, {n: "Técnicas de Respiração", m:{c:8, e:-15}}] }
                 ]
             },
             C: { 
-                name: "Vulnerável", s: { c: 15, e: 40 }, 
+                name: "Base Vulnerável", s: { c: 12, e: 45, r: 15 }, 
                 phases: [
-                    { t: "Primeiros Anos", d: "Instabilidade habitacional e falta de acesso a creches públicas de qualidade.", fact: "IBGE: A ausência de creches força a estagnação do desenvolvimento cognitivo precoce.", c: [{n: "Trabalho Doméstico", m:{e:20}}, {n: "Escola Sucateada", m:{c:5, e:10}}, {n: "Autodidatismo", m:{c:8, e:25}}] },
-                    { t: "Ensino Básico", d: "Necessidade de conciliar estudo com a geração de renda imediata para a família.", fact: "IBGE: O trabalho precoce é a maior barreira para a conclusão do Ensino Médio.", c: [{n: "Trabalho 44h", m:{e:35, c:-10}}, {n: "Estudo Noturno", m:{c:10, e:30}}, {n: "Bicos Informais", m:{e:25, c:2}}] },
-                    { t: "Portão de Saída", d: "A fadiga acumulada e a lacuna de base tornam o vestibular um muro quase intransponível.", fact: "INEP: O cansaço físico é o fator oculto que reduz as notas da classe base em 30%.", c: [{n: "Tentar ENEM Exausto", m:{c:10, e:20}}, {n: "Trabalho Imediato", m:{c:-10, e:5}}, {n: "Curso Técnico", m:{c:15, e:15}}] }
+                    { t: "Educação Infantil", d: "Acesso limitado; cuidado informal ou creches superlotadas.", fact: "35% das crianças de baixa renda não têm acesso a creches de qualidade.", c: [{n: "Creche Pública (Fila)", m:{c:5, e:10}}, {n: "Cuidado de Vizinhos", m:{c:2, e:15}}, {n: "Sozinho em Casa", m:{c:0, e:25}}, {n: "Projeto Social ONG", m:{c:8, r:10}}] },
+                    { t: "Ensino Fundamental", d: "Escola pública com falta de recursos e infraestrutura precária.", fact: "A reprovação em escolas de periferia é drasticamente superior à média nacional.", c: [{n: "Escola Pública de Bairro", m:{c:5, e:15}}, {n: "Ajudar a Família no Trabalho", m:{c:2, e:25}}, {n: "Biblioteca Pública (Longe)", m:{c:10, e:10}}, {n: "Estudar com Livros Doados", m:{c:6, e:12}}] },
+                    { t: "Sobrevivência", d: "Trabalho precoce para garantir necessidades básicas.", fact: "O trabalho infantil/juvenil é um dos principais fatores de evasão escolar no Brasil.", c: [{n: "Trabalho Informal (Semáforo)", m:{e:30, c:-5}}, {n: "Entregas por Aplicativo", m:{e:35, c:2}}, {n: "Cuidado de Irmãos Menores", m:{e:25, c:0}}, {n: "Venda de Doces/Produtos", m:{e:28, c:3}}] },
+                    { t: "Ensino Médio", d: "Conciliação exaustiva entre trabalho e estudo noturno.", fact: "30% dos jovens de baixa renda abandonam o ensino médio para trabalhar.", c: [{n: "Escola Pública Noturna", m:{c:5, e:35}}, {n: "Cursinho Comunitário", m:{c:12, e:25}}, {n: "Estudar Durante o Trajeto", m:{c:8, e:20}}, {n: "Trabalho 44h Semanais", m:{c:2, e:45}}] },
+                    { t: "Dilema", d: "Escolha do curso baseada na possibilidade de sobrevivência.", fact: "A 'escolha' é limitada pela nota de corte e pelo custo de permanência.", c: [{n: "Pedagogia", m:{c:10, e:15}}, {n: "Serviço Social", m:{c:10, e:18}}, {n: "Tentar Medicina (Risco Alto)", m:{c:20, e:40}}, {n: "Curso Técnico Rápido", m:{c:8, e:10}}] },
+                    { t: "Reta Final", d: "Preparação sob pressão financeira e falta de internet.", fact: "A exclusão digital afeta 40% dos estudantes da rede pública.", c: [{n: "Estudar por Apostilas", m:{c:10, e:20}}, {n: "Videoaulas (Wi-fi Público)", m:{c:12, e:25}}, {n: "Estudo Coletivo (Apoio)", m:{c:8, r:10}}, {n: "Estudar Madrugada Adentro", m:{c:15, e:40}}] },
+                    { t: "O DIA DO ENEM", d: "Você viajou 2 horas de ônibus e está sem dormir direito.", fact: "Candidatos que dependem de transporte público têm maior nível de estresse pré-prova.", c: [{n: "Oração e Esperança", m:{e:-10, c:5}}, {n: "Café para Manter Alerta", m:{e:15, c:5}}, {n: "Superar o Cansaço Físico", m:{e:20, c:10}}, {n: "Foco na Única Oportunidade", m:{e:10, c:15}}] }
                 ]
             }
         };
 
-        let session = { id: Math.random().toString(36).substr(2, 5).toUpperCase(), path: null, stats: {}, current: 0 };
-        document.getElementById('session-id').innerText = session.id;
+        const app = {
+            data: { id: 'PART_' + Date.now(), timestamp: new Date().toISOString(), pre: {}, game: { path: '', choices: [], stats: {} }, post: {} },
+            session: null, startTime: null,
 
-        function transitionTo(id) {
-            document.querySelectorAll('section').forEach(s => s.classList.add('hidden-scene'));
-            document.getElementById(id).classList.remove('hidden-scene');
-            if(id === 'roulette-screen') spin();
-            if(id === 'game-screen') document.getElementById('stats').classList.remove('hidden');
-        }
+            start() { this.startTime = Date.now(); this.startTimer(); this.transition('scene-pre'); document.getElementById('display-id').innerText = this.data.id; },
+            reject() { location.reload(); },
 
-        function spin() {
-            const keys = ["A", "C"];
-            const chosen = keys[Math.floor(Math.random() * keys.length)];
-            setTimeout(() => {
-                session.path = DATA_MODEL[chosen];
-                session.stats = {...session.path.s};
-                document.getElementById('path-reveal').innerText = "ORIGEM: " + session.path.name;
-                setTimeout(() => { updateUI(); render(); transitionTo('game-screen'); }, 2000);
-            }, 2500);
-        }
+            savePre() {
+                const p1 = document.getElementById('pre-1').value;
+                const p2 = document.getElementById('pre-2').value;
+                const p3 = document.getElementById('pre-3').value;
+                if(!p1 || !p2 || !p3) return alert("Por favor, preencha todas as perguntas.");
+                this.data.pre = { p1, p2, p3 };
+                this.transition('scene-roulette');
+                this.spin();
+            },
 
-        function updateUI() {
-            document.getElementById('fill-c').style.width = Math.min(100, session.stats.c) + '%';
-            document.getElementById('fill-e').style.width = Math.min(100, session.stats.e) + '%';
-        }
+            spin() {
+                const keys = ["A", "C"];
+                const chosen = keys[Math.floor(Math.random() * keys.length)];
+                setTimeout(() => {
+                    this.session = { path: DATA_MODEL[chosen], stats: {...DATA_MODEL[chosen].s}, current: 0 };
+                    this.data.game.path = this.session.path.name;
+                    document.getElementById('path-reveal').innerText = "ORIGEM: " + this.session.path.name;
+                    setTimeout(() => { this.transition('scene-game'); this.render(); }, 2000);
+                }, 2500);
+            },
 
-        function render() {
-            const p = session.path.phases[session.current];
-            if(!p) return end();
-            document.getElementById('phase-tag').innerText = "FASE_0" + (session.current + 1);
-            document.getElementById('phase-title').innerText = p.t;
-            document.getElementById('phase-desc').innerText = p.d;
-            document.getElementById('ibge-box').innerText = "DADO IBGE: " + p.fact;
-            
-            const list = document.getElementById('choice-list');
-            list.innerHTML = '';
-            p.c.forEach(c => {
-                const b = document.createElement('button');
-                b.className = "choice-btn";
-                b.innerHTML = `<span>${c.n}</span>`;
-                b.onclick = () => {
-                    for(let m in c.m) session.stats[m] += c.m[m];
-                    session.current++;
-                    updateUI();
-                    render();
-                };
-                list.appendChild(b);
-            });
-        }
+            render() {
+                const p = this.session.path.phases[this.session.current];
+                if(!p) return this.startSuspense();
+                
+                document.getElementById('stats').classList.remove('hidden-scene');
+                document.getElementById('progress-fill').style.width = ((this.session.current + 1) / 7 * 100) + '%';
+                document.getElementById('phase-tag').innerText = `FASE ${this.session.current + 1} / 7`;
+                document.getElementById('phase-title').innerText = p.t;
+                document.getElementById('phase-desc').innerText = p.d;
+                document.getElementById('ibge-box').innerText = "INFO: " + p.fact;
+                
+                const list = document.getElementById('choice-list');
+                list.innerHTML = '';
+                p.c.forEach(c => {
+                    const b = document.createElement('button');
+                    b.className = "choice-btn";
+                    b.innerHTML = `<span>${c.n}</span>`;
+                    b.onclick = () => {
+                        this.data.game.choices.push({ fase: p.t, escolha: c.n });
+                        for(let m in c.m) this.session.stats[m] += c.m[m];
+                        this.session.current++;
+                        this.updateUI();
+                        this.render();
+                    };
+                    list.appendChild(b);
+                });
+            },
 
-        function end() {
-            transitionTo('results-screen');
-            const c = session.stats.c;
-            const e = session.stats.e;
-            let curso = c > 110 ? "MEDICINA" : c > 75 ? "DIREITO" : "SUBEMPREGO";
-            let desc = c > 110 ? "Seu sucesso é o resultado matemático de um sistema projetado para você." : "A geometria social impediu sua ascensão. O cansaço físico consumiu seu capital acadêmico.";
-            
-            document.getElementById('final-course').innerText = curso;
-            document.getElementById('final-desc').innerText = desc;
-        }
+            updateUI() {
+                document.getElementById('fill-c').style.width = Math.min(100, Math.max(0, this.session.stats.c)) + '%';
+                document.getElementById('fill-e').style.width = Math.min(100, Math.max(0, this.session.stats.e)) + '%';
+                document.getElementById('fill-r').style.width = Math.min(100, Math.max(0, this.session.stats.r)) + '%';
+            },
+
+            startSuspense() {
+                this.transition('scene-suspense');
+                const logs = ["Cruzando notas de corte...", "Aplicando pesos de Redação...", "Verificando Lei de Cotas...", "Finalizando Chamada SISU..."];
+                let i = 0;
+                const interval = setInterval(() => {
+                    document.getElementById('suspense-log').innerText = logs[i++];
+                    if(i >= logs.length) { clearInterval(interval); setTimeout(() => this.showResult(), 1500); }
+                }, 1000);
+            },
+
+            showResult() {
+                const c = this.session.stats.c;
+                const path = this.session.path.name;
+                let course = "", desc = "";
+
+                if (path === "Elite Herdeira") {
+                    if (c > 180) { course = "MEDICINA (USP)"; desc = "O capital cultural acumulado e a base de elite garantiram a vaga mais concorrida."; }
+                    else if (c > 150) { course = "DIREITO (UFRJ)"; desc = "Resultado sólido em uma das instituições mais prestigiadas do país."; }
+                    else { course = "ADMINISTRAÇÃO (FGV)"; desc = "Você seguirá a trajetória de liderança em uma instituição privada de elite."; }
+                } else {
+                    if (c > 120) { course = "PEDAGOGIA (FEDERAL)"; desc = "Uma vitória extraordinária contra as barreiras estruturais do sistema."; }
+                    else if (c > 90) { course = "CURSO TÉCNICO (IF)"; desc = "Acesso garantido a uma formação profissionalizante pública."; }
+                    else { course = "NÃO APROVADO"; desc = "A exaustão e a falta de base estrutural impediram a aprovação neste ciclo."; }
+                }
+
+                document.getElementById('final-course').innerText = course;
+                document.getElementById('course-desc').innerText = desc;
+                this.data.game.result = course;
+                this.transition('scene-post');
+            },
+
+            async finish() {
+                const p1 = document.getElementById('post-1').value;
+                const p2 = document.getElementById('post-2').value;
+                const p3 = document.getElementById('post-3').value;
+                const p4 = document.getElementById('post-4').value;
+                if(!p1 || !p2 || !p3 || !p4) return alert("Por favor, responda todas as perguntas.");
+                
+                this.data.post = { p1, p2, p3, p4 };
+                document.getElementById('btn-finish').innerText = "ENVIANDO...";
+                document.getElementById('btn-finish').disabled = true;
+
+                // ENVIO EM TEMPO REAL (Preparado para CSV/Webhook)
+                try {
+                    console.log("Enviando dados para o servidor:", this.data);
+                    // Descomente abaixo quando tiver a URL do endpoint:
+                    /*
+                    await fetch(ENDPOINT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors', // Útil para webhooks simples
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(this.data)
+                    });
+                    */
+                    this.showThanks();
+                } catch (e) {
+                    console.error("Erro no envio real-time:", e);
+                    this.showThanks(); // Avança mesmo em erro para não travar o usuário
+                }
+            },
+
+            showThanks() {
+                this.transition('scene-thanks');
+                document.getElementById('final-id').innerText = this.data.id;
+            },
+
+            transition(id) {
+                document.querySelectorAll('section').forEach(s => s.classList.add('hidden-scene'));
+                document.getElementById(id).classList.remove('hidden-scene');
+            },
+
+            startTimer() {
+                setInterval(() => {
+                    const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+                    const minutes = Math.floor(elapsed / 60);
+                    const seconds = elapsed % 60;
+                    document.getElementById('timer').innerText = `Tempo: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                }, 1000);
+            }
+        };
     </script>
 </body>
 </html>
